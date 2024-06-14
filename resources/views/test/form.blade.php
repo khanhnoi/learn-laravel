@@ -10,9 +10,10 @@
 
 <body>
     <h1>Form</h1>
-    <button><a href="<?php echo route('test.form') ?>">Form Name</a></button> <br />
-    
-    
+    <p>{{ $test ?? '' }}</p>
+    <button><a href="<?php echo route('test.form'); ?>">Form Name</a></button> <br />
+
+
     <form method="POST" action="/test-by-form">
         <input type="text" name='username' placeholder="name">
         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
@@ -110,17 +111,17 @@
     </form>
 
 
-   
+
     <button><a href="/test-redirect">Test Redirect</a></button>
     <br />
     <button><a href="/test-view">Test View</a></button>
     <br />
-   
+
     <button><a href="/test-group">Test Group</a></button> <br />
     <button><a href="/test-group-2">Test Group</a></button> <br />
 
     <button><a href="/test-id/123">Test Id</a></button> <br />
-    <button><a href="<?php echo route('test.id', [ 'someThing' => uniqid(), 'id' => rand(0,10000)]) ?>">Test Id Name</a></button> <br />
+    <button><a href="<?php echo route('test.id', ['someThing' => uniqid(), 'id' => rand(0, 10000)]); ?>">Test Id Name</a></button> <br />
     <button><a href="/test-id-null">Test Id Null</a></button> <br />
 
     <button><a href="/test-slug/slug-id-id">Test slug and Id</a></button> <br />
@@ -130,11 +131,22 @@
     <button><a href="/test-middle/test">test-middle</a></button> <br />
 
 
-    <button><a href="/test-form-controller">test-controller</a></button> <br />
-    
-    
-   
-   
+    <button><a href="/test-form-controller">test-controller</a></button> <button><a
+            href="/test-form-controller-2">test-controller-2</a></button> <br />
+    <button><a href="/test-id-controller/12324">test-id-controller</a></button> <br />
+
+
+    <br /><br /><br /><br />
+
+    <button><a href="/test-db">test-db</a></button> <br />
+
+    @if ($type == 'test-db')
+    <button><a href="/test-db/add">add-db-form</a></button> <br />
+    <button><a href="/test-db/edit/id">edit-db-by-id</a></button> <br />
+    @endif
+
+
+
 </body>
 
 </html>

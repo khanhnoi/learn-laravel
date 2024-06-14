@@ -17,6 +17,7 @@ class TestMiddleware
     public function handle(Request $request, Closure $next)
     {
         // return redirect(route('test.form'));
+        echo "test midd";
         return $next($request);
     }
 }

@@ -1,9 +1,16 @@
 <?php
 
-use App\Http\Controllers\TestController;
+
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Http\Request;
+
+
+use App\Http\Controllers\TestController;
+// use App\Http\Controllers\Admin\TestController;
+
+use App\Http\Controllers\TestController as UserTestController;
+use App\Http\Controllers\Admin\TestController as AdminTestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,7 +64,7 @@ Route::get('/welcome', function () {
 
 
 Route::get('/test-form', function () {
-    return view('test.form'); //->name('test.form');
+    return view('test.form'); //-
 });
 
 Route::get('/test-form-name', function () {
@@ -181,15 +188,48 @@ Route::get('test-slug-validate/{slug}-{id}', function ($slug, $id, Request $requ
 
 // });
 
-Route::prefix('test-middle')->middleware('testMiddleware') ->group(function () {
+Route::prefix('test-middle')->middleware('testMiddleware')->group(function () {
 
     Route::get('test', function () {
         return 'test middle';
     });
-    
+
 });
 
 // ->middleware(EnsureTokenIsValid::class)
 
 
-Route::get('/test-form-controller', [TestController::class, 'index']);
+Route::get('/test-form-controller', [TestController::class, 'index'])->name('test-form-controller');
+Route::get('/test-form-controller-2', 'TestController@index')->name('test-form-controller'); // add protected $namespace = 'App\Http\Controllers' at route provider;
+Route::get('test-id-controller/{id}', [TestController::class, 'getId']);
+
+Route::prefix('test-db')->group(function () {
+    Route::get('/', [TestController::class, 'all'])->name("testDb.all");
+
+    Route::get('/add', [TestController::class, 'add'])->name("testDB.add");
+
+    Route::post('/add', [TestController::class, 'handleAdd'])->name("testDB.handleAdd");
+
+    Route::get('edit/{id}', [TestController::class, 'get'])->name("testDB.get");
+
+    Route::post('edit/{id}', [TestController::class, 'handleUpdate'])->name("testDB.handleUpdate");
+
+    route::delete('delete/{id}', [TestController::class, 'handleDelete'])->name("testDB.Delete");
+});
+
+
+Route::prefix('admin/test-db')->group(function () {
+    Route::get('/', [AdminTestController::class, 'all'])->name("testDb.all");
+
+    Route::resource('test-resource', AdminTestController::class);
+
+    // Route::get('/add', [TestController::class, 'add'])->name("testDB.add");
+
+    // Route::post('/add', [TestController::class, 'handleAdd'])->name("testDB.handleAdd");
+
+    // Route::get('edit/{id}', [TestController::class, 'get'])->name("testDB.get");
+
+    // Route::post('edit/{id}', [TestController::class, 'handleUpdate'])->name("testDB.handleUpdate");
+
+    // route::delete('delete/{id}', [TestController::class, 'handleDelete'])->name("testDB.Delete");
+})->middleware('testMiddleware');;
