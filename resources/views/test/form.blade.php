@@ -9,8 +9,7 @@
 </head>
 
 <body>
-    <h1>Form</h1>
-    <p>{{ $test ?? '' }}</p>
+    <h1>Form</h1>    <p>{{ $test ?? '' }}</p>
     <button><a href="<?php echo route('test.form'); ?>">Form Name</a></button> <br />
 
 
@@ -140,7 +139,7 @@
 
     <button><a href="/test-db">test-db</a></button> <br />
 
-    @if ($type == 'test-db')
+    @if ($type ?? '' == 'test-db')
     <button><a href="/test-db/add">add-db-form</a></button> <br />
     <button><a href="/test-db/edit/id">edit-db-by-id</a></button> <br />
     @endif

@@ -10,8 +10,15 @@
 
 <body>
     {{-- @if ($type == 'test-db') --}}
+    <br />
     <button><a href="/test-db/add">add-db-form</a></button> <br />
     <button><a href="/test-db/edit/id">edit-db-by-id</a></button> <br />
+
+    <form action={{ route('testDB.upload') }} method="post" enctype="multipart/form-data">
+        <input type="file" name="photo" id="" >
+        @csrf
+        <button type="submit">Submit</button>
+    </form>
     {{-- @endif --}}
 </body>
 

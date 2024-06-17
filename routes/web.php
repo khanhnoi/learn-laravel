@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 
 use App\Http\Controllers\TestController;
@@ -22,6 +23,11 @@ use App\Http\Controllers\Admin\TestController as AdminTestController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+Route::get('/phpinfo', function () {
+    phpinfo(); 
+});
 
 Route::get('/', function () {
     // return view('welcome');
@@ -62,8 +68,27 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
+Route::get('demo-response', function () {
 
-Route::get('/test-form', function () {
+    $res1 = response('Test', 201);
+    $res2 = new Response('Test2', 404);
+    return $res2;
+    
+    // return (new Response("test", 201))->;
+});
+
+
+Route::get('/test-form', function (Request $request) {
+    if (isset($_GET['test']) ) {
+        echo $_GET['test'];
+    }
+
+    echo '<br/>';
+    echo json_encode(request()->all()) ;
+    echo '<br/>';
+    echo json_encode(request()->path()) ;
+    echo '<br/>';
+
     return view('test.form'); //-
 });
 
@@ -72,6 +97,7 @@ Route::get('/test-form-name', function () {
 })->name('test.form');
 
 Route::post('/test-by-form', function () {
+    print_r($_POST);
     return 'post';
 });
 
@@ -215,11 +241,16 @@ Route::prefix('test-db')->group(function () {
     Route::post('edit/{id}', [TestController::class, 'handleUpdate'])->name("testDB.handleUpdate");
 
     route::delete('delete/{id}', [TestController::class, 'handleDelete'])->name("testDB.Delete");
+
+    Route::post('upload', [TestController::class, 'handleFile'])->name('testDB.upload');
+
+    Route::get('download', [TestController::class, 'download']);
+    
 });
 
 
-Route::prefix('admin/test-db')->group(function () {
-    Route::get('/', [AdminTestController::class, 'all'])->name("testDb.all");
+Route::prefix('admin/test-db')->middleware('testMiddleware')->group(function () {
+    Route::get('/', [AdminTestController::class, 'all'])->name("admin.testDb.all");
 
     Route::resource('test-resource', AdminTestController::class);
 
@@ -232,4 +263,22 @@ Route::prefix('admin/test-db')->group(function () {
     // Route::post('edit/{id}', [TestController::class, 'handleUpdate'])->name("testDB.handleUpdate");
 
     // route::delete('delete/{id}', [TestController::class, 'handleDelete'])->name("testDB.Delete");
-})->middleware('testMiddleware');;
+});
+
+
+// test breeze
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+// require __DIR__.'/auth.php';
+
+// end test breeze
+
+
+
+
+// test shop 
+
+// end test shop
+
