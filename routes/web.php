@@ -1,6 +1,8 @@
 <?php
 
 
+use App\Http\Controllers\admin\AdminLoginController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -252,7 +254,7 @@ Route::prefix('test-db')->group(function () {
 Route::prefix('admin/test-db')->middleware('testMiddleware')->group(function () {
     Route::get('/', [AdminTestController::class, 'all'])->name("admin.testDb.all");
 
-    Route::resource('test-resource', AdminTestController::class);
+    // Route::resource('test-resource', AdminTestController::class);
 
     // Route::get('/add', [TestController::class, 'add'])->name("testDB.add");
 
@@ -277,8 +279,27 @@ Route::get('/dashboard', function () {
 
 
 
-
 // test shop 
+
+Route::get('/create-user', [UserController::class, 'createUser']);
+
+Route::prefix('admin')->group(function () {
+    Route::get('/login', [AdminLoginController::class, 'login'])->name('admin.login');
+});
+
+Route::group(['prefix' => 'admin'], function () {
+    // Route::get('/login', [AdminLoginController::class, 'login'])->name('admin.login');
+
+    Route::group(['middleware' => 'admin.guest'], function() {
+        Route::get('/login', [AdminLoginController::class, 'login'])->name('admin.login');
+        Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name('admin.authenticate');
+    });
+
+    Route::group(['middleware' => 'admin.auth'], function() {
+
+    });
+});
+
 
 // end test shop
 
