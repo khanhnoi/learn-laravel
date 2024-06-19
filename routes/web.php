@@ -15,6 +15,8 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\TestController as UserTestController;
 use App\Http\Controllers\Admin\TestController as AdminTestController;
 
+use App\Http\Controllers\Admin\HomeController as AdminHomeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -296,7 +298,8 @@ Route::group(['prefix' => 'admin'], function () {
     });
 
     Route::group(['middleware' => 'admin.auth'], function() {
-
+        Route::get('/', [AdminHomeController::class, 'home'])->name('admin.home');
+        Route::get('/logout', [AdminHomeController::class, 'logout'])->name('admin.logout');
     });
 });
 

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 
+use Illuminate\Support\Facades\Auth;
+
 class AdminLoginController extends Controller
 {
     //
@@ -31,11 +33,39 @@ class AdminLoginController extends Controller
         // }
 
         if ($validator->passes()) {
-            return "ok";
+
+            $email = $request->email;
+            $password = $request->password;
+
+            if (
+                Auth::guard('admin')
+                    ->attempt(['email' => $email, 'password' => $password], $request->get('remember'))
+            ) {
+                $admin = Auth::guard('admin')->user();
+
+                if ($admin->role == 2) {
+                    return redirect()->route('admin.home');
+                } else {
+
+                    $admin = Auth::guard('admin')->logout();
+                    return redirect()->route('admin.login')
+                        ->withErrors(['errorAuth' => 'not admin']);
+                }
+
+
+            } else {
+                return redirect()->route('admin.login')
+                    // ->with('error', 'email or pass incorrect');
+                    ->withErrors(['errorAuth' => 'email or pass incorrect']);
+            }
+            // return "ok";
         } else {
+            // return 'ko ok';
             return redirect()->route('admin.login')
                 ->withErrors($validator)
                 ->withInput($request->only('email'));
         }
     }
+
+  
 }
