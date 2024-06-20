@@ -13,7 +13,8 @@ class HomeController extends Controller
     {
         $admin = Auth::guard('admin')->user();
         // return 'home';
-        return 'welcome' . $admin->name . '<a href="' . route('admin.logout') . '">logout</a>';
+        // return 'welcome' . $admin->name . '<a href="' . route('admin.logout') . '">logout</a>';
+        return view('shop.admin.dashboard');
     }
     public function logout(Request $request)
     {
